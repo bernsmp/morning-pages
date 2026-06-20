@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Morning Edition · Useful Signals for Max · 2026-06-20</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,600..900&family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root { --ink:#111; --paper:#fffaf0; --muted:#57534e; }
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; background:var(--paper); color:var(--ink); font-family:Inter, system-ui, sans-serif; font-size:22px; line-height:1.22; }
+a { color:inherit; text-decoration-thickness:.08em; text-underline-offset:.16em; }
+.cover { min-height:100vh; padding:5vw; display:grid; grid-template-rows:auto 1fr auto; gap:4vw; background:radial-gradient(circle at 75% 20%, #f97316 0 9rem, transparent 9.2rem), linear-gradient(135deg,#fff7ed,#fef3c7 55%,#fce7f3); border-bottom:20px solid #111; }
+.masthead { display:flex; justify-content:space-between; gap:2rem; align-items:flex-start; font-size:clamp(1rem,2vw,1.45rem); font-weight:900; letter-spacing:.02em; text-transform:uppercase; }
+h1 { font-family:Newsreader, Georgia, serif; font-size:clamp(3.8rem,10vw,9rem); line-height:.9; margin:0; max-width:13ch; letter-spacing:-.045em; font-weight:900; }
+.deck { max-width:68rem; font-size:clamp(1.55rem,3vw,3.2rem); font-weight:850; letter-spacing:-.04em; }
+.editor-note { font-size:clamp(1.2rem,2.1vw,1.8rem); max-width:70rem; font-weight:800; background:#111; color:#fffaf0; padding:1.2rem 1.4rem; transform:rotate(-1deg); }
+.toc { padding:5vw; background:#111; color:#fffaf0; }
+.toc h2 { font-family:Newsreader, Georgia, serif; font-size:clamp(3rem,6.8vw,6.5rem); line-height:.92; margin:0 0 2.5rem; letter-spacing:-.045em; max-width:12ch; }
+.toc ol { list-style:none; padding:0; margin:0; display:grid; gap:1.2rem; }
+.toc li { border-top:2px solid rgba(255,255,255,.28); padding-top:1.1rem; }
+.toc a { display:grid; grid-template-columns:4.5rem 1fr; gap:.8rem 1rem; text-decoration:none; }
+.toc b { grid-row:1 / span 2; color:#fb7185; font-family:Newsreader, Georgia, serif; font-size:clamp(2.2rem,4vw,4rem); line-height:.9; }
+.toc-title { font-size:clamp(1.35rem,2.4vw,2.4rem); font-weight:900; letter-spacing:-.035em; }
+.toc em { display:block; color:#fde68a; font-style:normal; font-size:clamp(1rem,1.5vw,1.35rem); font-weight:750; line-height:1.25; }
+.spread { min-height:100vh; padding:5vw; background:var(--bg); color:var(--fg); border-bottom:16px solid var(--fg); overflow:hidden; }
+.spread-grid { min-height:82vh; display:grid; grid-template-columns:minmax(7rem,18vw) minmax(0,1fr); grid-template-rows:1fr auto; gap:2rem 4vw; align-items:center; position:relative; }
+.story-body { align-self:center; max-width:72rem; }
+.num { grid-row:1 / span 2; font-family:Newsreader, Georgia, serif; font-size:clamp(6rem,18vw,18rem); line-height:.8; font-weight:900; letter-spacing:-.08em; color:var(--accent); mix-blend-mode:multiply; }
+.meta { display:flex; flex-wrap:wrap; align-items:center; gap:1rem; font-size:clamp(1rem,1.5vw,1.35rem); font-weight:900; text-transform:uppercase; letter-spacing:.04em; }
+.kicker { border:3px solid currentColor; padding:.45rem .7rem; }
+.buckets { display:flex; flex-wrap:wrap; gap:.55rem; }
+.buckets span { background:var(--accent); color:var(--bg); padding:.45rem .65rem; border-radius:999px; }
+.max-flag { color:var(--accent); border:4px solid var(--accent); padding:.4rem .7rem; transform:rotate(-3deg); }
+.spread h2 { font-family:Newsreader, Georgia, serif; font-size:clamp(2.9rem,6.8vw,7rem); line-height:.92; letter-spacing:-.045em; margin:1.1rem 0 .8rem; max-width:16ch; font-weight:900; }
+.summary { font-size:clamp(1.35rem,2.6vw,2.65rem); max-width:54rem; font-weight:850; letter-spacing:-.035em; line-height:1.08; margin:.4rem 0 1rem; color:color-mix(in srgb, var(--fg), var(--accent) 22%); }
+.note { font-size:clamp(1.2rem,2.1vw,2.15rem); max-width:54rem; font-weight:850; letter-spacing:-.03em; line-height:1.12; margin:0 0 1.25rem; }
+.note span { color:var(--accent); text-transform:uppercase; font-size:.72em; letter-spacing:.04em; }
+.stats { display:flex; flex-wrap:wrap; gap:1rem; }
+.stats div { min-width:10rem; border:4px solid currentColor; padding:.7rem .9rem; background:color-mix(in srgb, var(--bg), white 12%); }
+.stats b { display:block; font-family:Newsreader, Georgia, serif; font-size:clamp(2rem,4vw,4.8rem); line-height:.85; color:var(--accent); }
+.stats span { font-size:1rem; font-weight:900; text-transform:uppercase; }
+.read { grid-column:2; justify-self:start; align-self:end; display:inline-block; font-size:clamp(1.2rem,2vw,2rem); font-weight:900; background:var(--fg); color:var(--bg); padding:1rem 1.2rem; text-decoration:none; box-shadow:.35rem .35rem 0 var(--accent); }
+.spread-midnight .num, .spread-terminal .num, .spread-big-stat-finish .num { mix-blend-mode:normal; }
+.spread-rose-alert-stamp .num { transform:rotate(-9deg); border:8px solid var(--accent); padding:.2em; border-radius:50%; width:max-content; }
+.spread-terminal h2 { font-family:Inter, system-ui, sans-serif; letter-spacing:-.09em; text-transform:uppercase; }
+.spread-terminal h2::before { content:'$ '; color:var(--accent); }
+.spread-academic-drop-cap h2::first-letter { color:var(--accent); font-size:1.28em; }
+.spread-big-stat-finish .spread-grid { grid-template-columns:minmax(7rem,18vw) minmax(0,1fr); }
+.spread-big-stat-finish .num { opacity:.9; }
+.footer { padding:4vw 5vw; background:#fffaf0; font-size:clamp(1.1rem,1.8vw,1.6rem); font-weight:800; }
+@media (max-width: 760px) {
+  body { font-size:20px; }
+  .spread-grid { grid-template-columns:1fr; align-items:start; }
+  .num { grid-row:auto; font-size:6rem; }
+  .read { grid-column:1; }
+  .spread h2 { font-size:3rem; }
+}
+</style>
+</head>
+<body>
+<header class="cover">
+  <div class="masthead"><div>Morning Edition</div><div>Saturday, June 20, 2026</div></div>
+  <div>
+    <h1>Useful Signals Worth Your Morning</h1>
+    <p class="deck">Ten tools, launches, repos, and weird ideas filtered for creative leverage, local-first experiments, and things you can actually use.</p>
+  </div>
+  <div class="editor-note">Editorial filter: Sources: Hacker News front page, Lobsters, Product Hunt launches, and GitHub Trending. Skip crypto price chatter, VC/fundraising announcements, enterprise-sales fluff, benchmark-only model news, corporate AI press releases, generic politics, big-tech earnings, and outrage bait. Lean into AI tools, creative software, dev tools, privacy, weird science, local-first systems, automations, and anything actionable. Today: 10 stories, 9 flagged as directly applicable to you.</div>
+</header>
+<nav class="toc">
+  <h2>Why these 10 are worth caring about</h2>
+  <ol><li><a href="https://github.com/calesthio/OpenMontage"><b>01</b><span class="toc-title">calesthio/OpenMontage</span><em>GitHub Trending · Directly relevant to your problem-first prototyping and workflow taste.</em></a></li>
+<li><a href="https://github.com/aishwaryanr/awesome-generative-ai-guide"><b>02</b><span class="toc-title">aishwaryanr/awesome-generative-ai-guide</span><em>GitHub Trending · Directly relevant to your Hermes / Cognitive Fingerprint AI-systems radar.</em></a></li>
+<li><a href="https://github.com/chopratejas/headroom"><b>03</b><span class="toc-title">chopratejas/headroom</span><em>GitHub Trending · Directly relevant to your problem-first prototyping and workflow taste.</em></a></li>
+<li><a href="https://github.com/google-research/timesfm"><b>04</b><span class="toc-title">google-research/timesfm</span><em>GitHub Trending · Directly relevant to your problem-first prototyping and workflow taste.</em></a></li>
+<li><a href="https://www.producthunt.com/products/jetbrains"><b>05</b><span class="toc-title">Mellum by JetBrains</span><em>Product Hunt · Directly relevant to your Hermes / Cognitive Fingerprint AI-systems radar.</em></a></li>
+<li><a href="https://metiq.space"><b>06</b><span class="toc-title">Show HN: Metiq: a real time 3D globe for 100 public datasets</span><em>Hacker News · Actionable: a live thing you can try, steal from, or route into the lab.</em></a></li>
+<li><a href="https://www.producthunt.com/products/are-you-in-the-weights"><b>07</b><span class="toc-title">Are you in the Weights?</span><em>Product Hunt · Directly relevant to your problem-first prototyping and workflow taste.</em></a></li>
+<li><a href="https://www.producthunt.com/products/pixlie"><b>08</b><span class="toc-title">Pixlie</span><em>Product Hunt · Directly relevant to your problem-first prototyping and workflow taste.</em></a></li>
+<li><a href="https://www.producthunt.com/products/releasedock"><b>09</b><span class="toc-title">ReleaseDock</span><em>Product Hunt · Directly relevant to your problem-first prototyping and workflow taste.</em></a></li>
+<li><a href="https://www.producthunt.com/products/zernio"><b>10</b><span class="toc-title">Zernio WhatsApp API</span><em>Product Hunt · Directly relevant to your problem-first prototyping and workflow taste.</em></a></li></ol>
+</nav>
+
+<section class="spread spread-hero" style="--bg:#fff4d8;--fg:#111111;--accent:#f05a28">
+  <div class="spread-grid">
+    <div class="num" aria-hidden="true">01</div>
+    <div class="story-body">
+      <div class="meta">
+        <div class="kicker">GitHub Trending #8 · github.com</div>
+        <div class="buckets"><span>AI tools</span><span>creative software</span><span>dev tools</span></div>
+        <div class="max-flag">APPLIES TO MAX</div>
+      </div>
+      <h2>calesthio/OpenMontage</h2>
+      <p class="summary">World&#x27;s first open-source, agentic video production system. 12 pipelines, 52 tools, 500+ agent skills. Turn your AI coding assistant into a full video production studio.</p>
+      <p class="note"><span>Why it matters:</span> Directly relevant to your problem-first prototyping and workflow taste.</p>
+      <div class="stats">
+        <div><b>156</b><span>signal</span></div>
+        <div><b>0</b><span>comments</span></div>
+        <div><b>70</b><span>taste score</span></div>
+      </div>
+    </div>
+    <a class="read" href="https://github.com/calesthio/OpenMontage">Read the story →</a>
+  </div>
+</section>
+
+<section class="spread spread-midnight" style="--bg:#111827;--fg:#f8fafc;--accent:#67e8f9">
+  <div class="spread-grid">
+    <div class="num" aria-hidden="true">02</div>
+    <div class="story-body">
+      <div class="meta">
+        <div class="kicker">GitHub Trending #5 · github.com</div>
+        <div class="buckets"><span>AI tools</span><span>dev tools</span><span>weird science</span></div>
+        <div class="max-flag">APPLIES TO MAX</div>
+      </div>
+      <h2>aishwaryanr/awesome-generative-ai-guide</h2>
+      <p class="summary">A one stop repository for generative AI research updates, interview resources, notebooks and much more!</p>
+      <p class="note"><span>Why it matters:</span> Directly relevant to your Hermes / Cognitive Fingerprint AI-systems radar.</p>
+      <div class="stats">
+        <div><b>107</b><span>signal</span></div>
+        <div><b>0</b><span>comments</span></div>
+        <div><b>66</b><span>taste score</span></div>
+      </div>
+    </div>
+    <a class="read" href="https://github.com/aishwaryanr/awesome-generative-ai-guide">Read the story →</a>
+  </div>
+</section>
+
+<section class="spread spread-rose-alert-stamp" style="--bg:#ffe4ec;--fg:#3b0a1e;--accent:#e11d48">
+  <div class="spread-grid">
+    <div class="num" aria-hidden="true">03</div>
+    <div class="story-body">
+      <div class="meta">
+        <div class="kicker">GitHub Trending #7 · github.com</div>
+        <div class="buckets"><span>AI tools</span><span>dev tools</span><span>actionable</span></div>
+        <div class="max-flag">APPLIES TO MAX</div>
+      </div>
+      <h2>chopratejas/headroom</h2>
+      <p class="summary">Compress tool outputs, logs, files, and RAG chunks before they reach the LLM. 60-95% fewer tokens, same answers. Library, proxy, MCP server.</p>
+      <p class="note"><span>Why it matters:</span> Directly relevant to your problem-first prototyping and workflow taste.</p>
+      <div class="stats">
+        <div><b>4005</b><span>signal</span></div>
+        <div><b>0</b><span>comments</span></div>
+        <div><b>65</b><span>taste score</span></div>
+      </div>
+    </div>
+    <a class="read" href="https://github.com/chopratejas/headroom">Read the story →</a>
+  </div>
+</section>
+
+<section class="spread spread-terminal" style="--bg:#07110b;--fg:#d1fae5;--accent:#22c55e">
+  <div class="spread-grid">
+    <div class="num" aria-hidden="true">04</div>
+    <div class="story-body">
+      <div class="meta">
+        <div class="kicker">GitHub Trending #2 · github.com</div>
+        <div class="buckets"><span>AI tools</span><span>dev tools</span><span>weird science</span></div>
+        <div class="max-flag">APPLIES TO MAX</div>
+      </div>
+      <h2>google-research/timesfm</h2>
+      <p class="summary">TimesFM (Time Series Foundation Model) is a pretrained time-series foundation model developed by Google Research for time-series forecasting.</p>
+      <p class="note"><span>Why it matters:</span> Directly relevant to your problem-first prototyping and workflow taste.</p>
+      <div class="stats">
+        <div><b>1510</b><span>signal</span></div>
+        <div><b>0</b><span>comments</span></div>
+        <div><b>62</b><span>taste score</span></div>
+      </div>
+    </div>
+    <a class="read" href="https://github.com/google-research/timesfm">Read the story →</a>
+  </div>
+</section>
+
+<section class="spread spread-academic-drop-cap" style="--bg:#f4efe7;--fg:#201a17;--accent:#7c2d12">
+  <div class="spread-grid">
+    <div class="num" aria-hidden="true">05</div>
+    <div class="story-body">
+      <div class="meta">
+        <div class="kicker">Product Hunt #2 · producthunt.com</div>
+        <div class="buckets"><span>AI tools</span><span>weird science</span><span>actionable</span></div>
+        <div class="max-flag">APPLIES TO MAX</div>
+      </div>
+      <h2>Mellum by JetBrains</h2>
+      <p class="summary">Fast LLMs for low-latency and high-performance workflows</p>
+      <p class="note"><span>Why it matters:</span> Directly relevant to your Hermes / Cognitive Fingerprint AI-systems radar.</p>
+      <div class="stats">
+        <div><b>25</b><span>signal</span></div>
+        <div><b>0</b><span>comments</span></div>
+        <div><b>54</b><span>taste score</span></div>
+      </div>
+    </div>
+    <a class="read" href="https://www.producthunt.com/products/jetbrains">Read the story →</a>
+  </div>
+</section>
+
+<section class="spread spread-solar-index" style="--bg:#fff7ed;--fg:#1c1917;--accent:#f59e0b">
+  <div class="spread-grid">
+    <div class="num" aria-hidden="true">06</div>
+    <div class="story-body">
+      <div class="meta">
+        <div class="kicker">Hacker News #26 · metiq.space</div>
+        <div class="buckets"><span>privacy/local-first</span><span>weird science</span><span>actionable</span></div>
+        
+      </div>
+      <h2>Show HN: Metiq: a real time 3D globe for 100 public datasets</h2>
+      
+      <p class="note"><span>Why it matters:</span> Actionable: a live thing you can try, steal from, or route into the lab.</p>
+      <div class="stats">
+        <div><b>127</b><span>signal</span></div>
+        <div><b>34</b><span>comments</span></div>
+        <div><b>46</b><span>taste score</span></div>
+      </div>
+    </div>
+    <a class="read" href="https://metiq.space">Read the story →</a>
+  </div>
+</section>
+
+<section class="spread spread-blueprint" style="--bg:#dbeafe;--fg:#0f172a;--accent:#2563eb">
+  <div class="spread-grid">
+    <div class="num" aria-hidden="true">07</div>
+    <div class="story-body">
+      <div class="meta">
+        <div class="kicker">Product Hunt #3 · producthunt.com</div>
+        <div class="buckets"><span>AI tools</span><span>weird science</span></div>
+        <div class="max-flag">APPLIES TO MAX</div>
+      </div>
+      <h2>Are you in the Weights?</h2>
+      <p class="summary">Find out if you live forever in the brain of the LLMs</p>
+      <p class="note"><span>Why it matters:</span> Directly relevant to your problem-first prototyping and workflow taste.</p>
+      <div class="stats">
+        <div><b>25</b><span>signal</span></div>
+        <div><b>0</b><span>comments</span></div>
+        <div><b>42</b><span>taste score</span></div>
+      </div>
+    </div>
+    <a class="read" href="https://www.producthunt.com/products/are-you-in-the-weights">Read the story →</a>
+  </div>
+</section>
+
+<section class="spread spread-field-note" style="--bg:#ecfccb;--fg:#1a2e05;--accent:#65a30d">
+  <div class="spread-grid">
+    <div class="num" aria-hidden="true">08</div>
+    <div class="story-body">
+      <div class="meta">
+        <div class="kicker">Product Hunt #6 · producthunt.com</div>
+        <div class="buckets"><span>AI tools</span><span>creative software</span></div>
+        <div class="max-flag">APPLIES TO MAX</div>
+      </div>
+      <h2>Pixlie</h2>
+      <p class="summary">AI video studio: text &amp; image to video, with real control</p>
+      <p class="note"><span>Why it matters:</span> Directly relevant to your problem-first prototyping and workflow taste.</p>
+      <div class="stats">
+        <div><b>25</b><span>signal</span></div>
+        <div><b>0</b><span>comments</span></div>
+        <div><b>41</b><span>taste score</span></div>
+      </div>
+    </div>
+    <a class="read" href="https://www.producthunt.com/products/pixlie">Read the story →</a>
+  </div>
+</section>
+
+<section class="spread spread-violet-lab" style="--bg:#ede9fe;--fg:#1e1b4b;--accent:#7c3aed">
+  <div class="spread-grid">
+    <div class="num" aria-hidden="true">09</div>
+    <div class="story-body">
+      <div class="meta">
+        <div class="kicker">Product Hunt #9 · producthunt.com</div>
+        <div class="buckets"><span>AI tools</span><span>actionable</span></div>
+        <div class="max-flag">APPLIES TO MAX</div>
+      </div>
+      <h2>ReleaseDock</h2>
+      <p class="summary">AI support agent, help center &amp; changelogs in a single inbox</p>
+      <p class="note"><span>Why it matters:</span> Directly relevant to your problem-first prototyping and workflow taste.</p>
+      <div class="stats">
+        <div><b>25</b><span>signal</span></div>
+        <div><b>0</b><span>comments</span></div>
+        <div><b>40</b><span>taste score</span></div>
+      </div>
+    </div>
+    <a class="read" href="https://www.producthunt.com/products/releasedock">Read the story →</a>
+  </div>
+</section>
+
+<section class="spread spread-big-stat-finish" style="--bg:#0f0f0f;--fg:#fff7ed;--accent:#fb7185">
+  <div class="spread-grid">
+    <div class="num" aria-hidden="true">10</div>
+    <div class="story-body">
+      <div class="meta">
+        <div class="kicker">Product Hunt #14 · producthunt.com</div>
+        <div class="buckets"><span>AI tools</span><span>dev tools</span></div>
+        <div class="max-flag">APPLIES TO MAX</div>
+      </div>
+      <h2>Zernio WhatsApp API</h2>
+      <p class="summary">One API for WhatsApp: messaging, calling, and AI agents</p>
+      <p class="note"><span>Why it matters:</span> Directly relevant to your problem-first prototyping and workflow taste.</p>
+      <div class="stats">
+        <div><b>25</b><span>signal</span></div>
+        <div><b>0</b><span>comments</span></div>
+        <div><b>38</b><span>taste score</span></div>
+      </div>
+    </div>
+    <a class="read" href="https://www.producthunt.com/products/zernio">Read the story →</a>
+  </div>
+</section>
+<footer class="footer">
+  Generated locally by Hermes from Hacker News, Lobsters, Product Hunt, and GitHub Trending. This issue is a single HTML file saved under <code>~/magazines/</code>.
+</footer>
+</body>
+</html>
